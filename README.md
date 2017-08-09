@@ -15,10 +15,11 @@ npm install nuka-carousel
 'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 
 var Carousel = require('nuka-carousel');
 
-const App = React.createClass({
+const App = createReactClass({
   mixins: [Carousel.ControllerMixin],
   render() {
     return (
@@ -93,7 +94,7 @@ Decorator objects have `component`, `position` & `style` properties. `component`
 
 ```javascript
 var Decorators = [{
-  component: React.createClass({
+  component: createReactClass({
     render() {
       return (
         <button
@@ -211,7 +212,7 @@ Allows half slides to be shown either side. Defaults to `false`
 The ControllerMixin provides a way to add external controllers for a carousel. To use the controller mixin, add it to your parent component as shown below:
 
 ```javascript
-const App = React.createClass({
+const App = createReactClass({
   mixins: [Carousel.ControllerMixin],
   render() {
     return (
@@ -228,7 +229,7 @@ It is required to give your component a ref value, and to pass the setCarouselDa
 After setting this up, your parent component has a carousels object in it's state. You can now control your carousels from other child components:
 
 ```javascript
-const App = React.createClass({
+const App = createReactClass({
   mixins: [Carousel.ControllerMixin],
   render() {
     return (
