@@ -134,6 +134,8 @@ const Carousel = React.createClass({
   },
 
   componentDidMount() {
+    // see https://github.com/facebook/react/issues/3417#issuecomment-121649937
+    this.mounted = true;
     this.setDimensions();
     this.bindEvents();
     this.setExternalData();
@@ -162,6 +164,8 @@ const Carousel = React.createClass({
   componentWillUnmount() {
     this.unbindEvents();
     this.stopAutoplay();
+    // see https://github.com/facebook/react/issues/3417#issuecomment-121649937
+    this.mounted = false;
   },
 
   render() {
@@ -179,13 +183,17 @@ const Carousel = React.createClass({
             {children}
           </ul>
         </div>
-        {this.props.decorators ?
-          this.props.decorators.map(function(Decorator, index) {
+        {this.props.decorators
+          ? this.props.decorators.map(function(Decorator, index) {
             return (
               <div
-                style={assign(self.getDecoratorStyles(Decorator.position), Decorator.style || {})}
+                style={assign(
+                  self.getDecoratorStyles(Decorator.position),
+                  Decorator.style || {}
+                )}
                 className={'slider-decorator-' + index}
-                key={index}>
+                key={index}
+              >
                 <Decorator.component
                   currentSlide={self.state.currentSlide}
                   slideCount={self.state.slideCount}
@@ -202,7 +210,10 @@ const Carousel = React.createClass({
             )
           })
         : null}
-        <style type="text/css" dangerouslySetInnerHTML={{__html: self.getStyleTagStyles()}}/>
+        <style
+          type="text/css"
+          dangerouslySetInnerHTML={{ __html: self.getStyleTagStyles() }}
+        />
       </div>
     )
   },
@@ -240,8 +251,17 @@ const Carousel = React.createClass({
           e.preventDefault();
         }
 
-        var length = self.props.vertical ? Math.round(Math.sqrt(Math.pow(e.touches[0].pageY - self.touchObject.startY, 2)))
-                                         : Math.round(Math.sqrt(Math.pow(e.touches[0].pageX - self.touchObject.startX, 2)))
+        var length = self.props.vertical
+          ? Math.round(
+            Math.sqrt(
+              Math.pow(e.touches[0].pageY - self.touchObject.startY, 2)
+            )
+          )
+          : Math.round(
+            Math.sqrt(
+              Math.pow(e.touches[0].pageX - self.touchObject.startX, 2)
+            )
+          );
 
         self.touchObject = {
           startX: self.touchObject.startX,
@@ -253,8 +273,16 @@ const Carousel = React.createClass({
         }
 
         self.setState({
-          left: self.props.vertical ? 0 : self.getTargetLeft(self.touchObject.length * self.touchObject.direction),
-          top: self.props.vertical ? self.getTargetLeft(self.touchObject.length * self.touchObject.direction) : 0
+          left: self.props.vertical
+            ? 0
+            : self.getTargetLeft(
+              self.touchObject.length * self.touchObject.direction
+            ),
+          top: self.props.vertical
+            ? self.getTargetLeft(
+              self.touchObject.length * self.touchObject.direction
+            )
+            : 0,
         });
       },
       onTouchEnd(e) {
@@ -311,8 +339,13 @@ const Carousel = React.createClass({
           e.preventDefault();
         }
 
-        var length = self.props.vertical ? Math.round(Math.sqrt(Math.pow(e.clientY - self.touchObject.startY, 2)))
-                                         : Math.round(Math.sqrt(Math.pow(e.clientX - self.touchObject.startX, 2)))
+        var length = self.props.vertical
+          ? Math.round(
+            Math.sqrt(Math.pow(e.clientY - self.touchObject.startY, 2))
+          )
+          : Math.round(
+            Math.sqrt(Math.pow(e.clientX - self.touchObject.startX, 2))
+          );
 
         self.touchObject = {
           startX: self.touchObject.startX,
@@ -324,8 +357,16 @@ const Carousel = React.createClass({
         };
 
         self.setState({
-          left: self.props.vertical ? 0 : self.getTargetLeft(self.touchObject.length * self.touchObject.direction),
-          top: self.props.vertical ? self.getTargetLeft(self.touchObject.length * self.touchObject.direction) : 0
+          left: self.props.vertical
+            ? 0
+            : self.getTargetLeft(
+              self.touchObject.length * self.touchObject.direction
+            ),
+          top: self.props.vertical
+            ? self.getTargetLeft(
+              self.touchObject.length * self.touchObject.direction
+            )
+            : 0,
         });
       },
       onMouseUp(e) {
@@ -565,17 +606,17 @@ const Carousel = React.createClass({
     switch (this.props.cellAlign) {
     case 'left': {
       offset = 0;
-      offset -= this.props.cellSpacing * (target);
+      offset -= this.props.cellSpacing * target;
       break;
     }
     case 'center': {
       offset = (this.state.frameWidth - this.state.slideWidth) / 2;
-      offset -= this.props.cellSpacing * (target);
+      offset -= this.props.cellSpacing * target;
       break;
     }
     case 'right': {
       offset = this.state.frameWidth - this.state.slideWidth;
-      offset -= this.props.cellSpacing * (target);
+      offset -= this.props.cellSpacing * target;
       break;
     }
     }
@@ -837,101 +878,91 @@ const Carousel = React.createClass({
 
   getDecoratorStyles(position) {
     switch (position) {
-    case 'TopLeft':
-      {
-        return {
-          position: 'absolute',
-          top: 0,
-          left: 0
-        };
-      }
-    case 'TopCenter':
-      {
-        return {
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          WebkitTransform: 'translateX(-50%)',
-          msTransform: 'translateX(-50%)'
-        };
-      }
-    case 'TopRight':
-      {
-        return {
-          position: 'absolute',
-          top: 0,
-          right: 0
-        };
-      }
-    case 'CenterLeft':
-      {
-        return {
-          position: 'absolute',
-          top: '50%',
-          left: 0,
-          transform: 'translateY(-50%)',
-          WebkitTransform: 'translateY(-50%)',
-          msTransform: 'translateY(-50%)'
-        };
-      }
-    case 'CenterCenter':
-      {
-        return {
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%,-50%)',
-          WebkitTransform: 'translate(-50%, -50%)',
-          msTransform: 'translate(-50%, -50%)'
-        };
-      }
-    case 'CenterRight':
-      {
-        return {
-          position: 'absolute',
-          top: '50%',
-          right: 0,
-          transform: 'translateY(-50%)',
-          WebkitTransform: 'translateY(-50%)',
-          msTransform: 'translateY(-50%)'
-        };
-      }
-    case 'BottomLeft':
-      {
-        return {
-          position: 'absolute',
-          bottom: 0,
-          left: 0
-        };
-      }
-    case 'BottomCenter':
-      {
-        return {
-          position: 'absolute',
-          bottom: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          WebkitTransform: 'translateX(-50%)',
-          msTransform: 'translateX(-50%)'
-        };
-      }
-    case 'BottomRight':
-      {
-        return {
-          position: 'absolute',
-          bottom: 0,
-          right: 0
-        };
-      }
-    default:
-      {
-        return {
-          position: 'absolute',
-          top: 0,
-          left: 0
-        };
-      }
+    case 'TopLeft': {
+      return {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+      };
+    }
+    case 'TopCenter': {
+      return {
+        position: 'absolute',
+        top: 0,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        WebkitTransform: 'translateX(-50%)',
+        msTransform: 'translateX(-50%)',
+      };
+    }
+    case 'TopRight': {
+      return {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+      };
+    }
+    case 'CenterLeft': {
+      return {
+        position: 'absolute',
+        top: '50%',
+        left: 0,
+        transform: 'translateY(-50%)',
+        WebkitTransform: 'translateY(-50%)',
+        msTransform: 'translateY(-50%)',
+      };
+    }
+    case 'CenterCenter': {
+      return {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+        WebkitTransform: 'translate(-50%, -50%)',
+        msTransform: 'translate(-50%, -50%)',
+      };
+    }
+    case 'CenterRight': {
+      return {
+        position: 'absolute',
+        top: '50%',
+        right: 0,
+        transform: 'translateY(-50%)',
+        WebkitTransform: 'translateY(-50%)',
+        msTransform: 'translateY(-50%)',
+      };
+    }
+    case 'BottomLeft': {
+      return {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+      };
+    }
+    case 'BottomCenter': {
+      return {
+        position: 'absolute',
+        bottom: 0,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        WebkitTransform: 'translateX(-50%)',
+        msTransform: 'translateX(-50%)',
+      };
+    }
+    case 'BottomRight': {
+      return {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+      };
+    }
+    default: {
+      return {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+      };
+    }
     }
   }
 
