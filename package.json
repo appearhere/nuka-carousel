@@ -1,6 +1,6 @@
 {
   "name": "@appearhere/nuka-carousel",
-  "version": "2.1.8",
+  "version": "2.2.0",
   "description": "Pure React Carousel",
   "main": "index.js",
   "dependencies": {
@@ -61,8 +61,6 @@
     "webpack-dev-server": "^1.12.0"
   },
   "peerDependencies": {
-    "react": "^0.14.8 || ^15.0.1",
-    "react-dom": "^0.14.8 || ^15.0.1",
     "react": "^0.14.9 || ^15.3.0 || ^16.0.0",
     "react-dom": "^0.14.9 || ^15.3.0 || ^16.0.0"
   },
