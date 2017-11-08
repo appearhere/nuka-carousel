@@ -4,19 +4,21 @@ import React from 'react';
 
 const DefaultDecorators = [
   {
-    component: React.createClass({
+    component: class extends React.Component {
       render() {
         return (
           <button
             style={this.getButtonStyles(this.props.currentSlide === 0 && !this.props.wrapAround)}
             onClick={this.handleClick}>PREV</button>
         )
-      },
-      handleClick(e) {
+      }
+
+      handleClick = (e) => {
         e.preventDefault();
         this.props.previousSlide();
-      },
-      getButtonStyles(disabled) {
+      };
+
+      getButtonStyles = (disabled) => {
         return {
           border: 0,
           background: 'rgba(0,0,0,0.4)',
@@ -26,24 +28,26 @@ const DefaultDecorators = [
           opacity: disabled ? 0.3 : 1,
           cursor: 'pointer'
         }
-      }
-    }),
+      };
+    },
     position: 'CenterLeft'
   },
   {
-    component: React.createClass({
+    component: class extends React.Component {
       render() {
         return (
           <button
             style={this.getButtonStyles(this.props.currentSlide + this.props.slidesToScroll >= this.props.slideCount && !this.props.wrapAround)}
             onClick={this.handleClick}>NEXT</button>
         )
-      },
-      handleClick(e) {
+      }
+
+      handleClick = (e) => {
         e.preventDefault();
         this.props.nextSlide();
-      },
-      getButtonStyles(disabled) {
+      };
+
+      getButtonStyles = (disabled) => {
         return {
           border: 0,
           background: 'rgba(0,0,0,0.4)',
@@ -53,12 +57,12 @@ const DefaultDecorators = [
           opacity: disabled ? 0.3 : 1,
           cursor: 'pointer'
         }
-      }
-    }),
+      };
+    },
     position: 'CenterRight'
   },
   {
-    component: React.createClass({
+    component: class extends React.Component {
       render() {
         var self = this;
         var indexes = this.getIndexes(self.props.slideCount, self.props.slidesToScroll);
@@ -79,29 +83,33 @@ const DefaultDecorators = [
             }
           </ul>
         )
-      },
-      getIndexes(count, inc) {
+      }
+
+      getIndexes = (count, inc) => {
         var arr = [];
         for (var i = 0; i < count; i += inc) {
           arr.push(i);
         }
         return arr;
-      },
-      getListStyles() {
+      };
+
+      getListStyles = () => {
         return {
           position: 'relative',
           margin: 0,
           top: -10,
           padding: 0
         }
-      },
-      getListItemStyles() {
+      };
+
+      getListItemStyles = () => {
         return {
           listStyleType: 'none',
           display: 'inline-block'
         }
-      },
-      getButtonStyles(active) {
+      };
+
+      getButtonStyles = (active) => {
         return {
           border: 0,
           background: 'transparent',
@@ -112,8 +120,8 @@ const DefaultDecorators = [
           fontSize: 24,
           opacity: active ? 1 : 0.5
         }
-      }
-    }),
+      };
+    },
     position: 'BottomCenter'
   }
 ];

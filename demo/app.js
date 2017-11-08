@@ -2,13 +2,14 @@
 
 import Carousel from '../src/carousel';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import ReactDom from 'react-dom';
 
 window.React = React;
 
-const App = React.createClass({
+const App = createReactClass({
+  displayName: 'App',
   mixins: [Carousel.ControllerMixin],
-
   getInitialState() { return { slideIndex: 0 }; },
 
   render() {
@@ -34,7 +35,7 @@ const App = React.createClass({
         <button onClick={() => this.setState({ slideIndex: 5 })}>6</button>
       </div>
     )
-  }
+  },
 });
 
 const content = document.getElementById('content');
